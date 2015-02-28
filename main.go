@@ -28,12 +28,39 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error parsing body: %v", err)
 	}
 
-	var h interface{}
+	var h hook
 	if err := json.Unmarshal(body, &h); err != nil {
 		log.Fatalf("Error unmarshalling hook: %v", err)
 	}
 
-	log.Printf("Hook is: %v", h)
+	log.Printf("Hook is: %+v", h)
 
 	w.WriteHeader(201)
+}
+
+type hook struct {
+	Id              string `json:"id"`
+	CreatedAt       string `json:"created_at"`
+	DeliveryAttempt int    `json:"delivery_attempt"`
+	Payload         payload
+}
+
+type payload struct {
+	Type       string `json:"type"`
+	BlockChain string `json:"block_chain"`
+	Block      block  `json:"block"`
+}
+
+type block struct {
+	Hash              string   `json:"hash"`
+	PreviousBlockHash string   `json:"previous_block_hash"`
+	Height            uint32   `json:"height"`
+	Confirmations     int      `json:"confirmations"`
+	MerkleRoot        string   `json:"merkle_root"`
+	Time              string   `json:"time"`
+	Nonce             uint32   `json:"nonce"`
+	Difficulty        float64  `json:"difficulty"`
+	Bits              string   `json:"bits"`
+	TransactionHashes []string `json:"transaction_hashes"`
+	ChainReceivedAt   string   `json:"chain_received_at"`
 }
