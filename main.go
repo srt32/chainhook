@@ -30,7 +30,7 @@ func hookHandler(w http.ResponseWriter, r *http.Request) {
 
 	var h interface{}
 	if err := json.Unmarshal(body, &h); err != nil {
-		log.Printf("Error unmarshalling hook: %v", err)
+		log.Fatalf("Error unmarshalling hook: %v", err)
 	}
 
 	log.Printf("Hook is: %v", h)
